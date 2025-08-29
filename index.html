@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>That's Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Stili per l'effetto di scheumorfismo */
+        .toggle-switch {
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+
+        .toggle-knob {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .toggle-on {
+            background-color: #4CAF50; /* Verde */
+        }
+
+        .toggle-on .toggle-knob {
+            transform: translateX(100%);
+        }
+
+        .toggle-off {
+            background-color: #F44336; /* Rosso */
+        }
+
+        .toggle-off .toggle-knob {
+            transform: translateX(0);
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-gray-300 p-8 rounded-2xl shadow-2xl [box-shadow:8px_8px_16px_#bebebe,-8px_-8px_16px_#ffffff] w-80 flex flex-col items-center">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">That's Life</h1>
+
+        <div class="space-y-6">
+
+            <div class="flex items-center space-x-4">
+                <span class="text-lg font-medium text-gray-700 w-20 text-right">Fast</span>
+                <div id="fast-toggle" class="toggle-switch w-12 h-6 flex items-center rounded-full cursor-pointer toggle-off">
+                    <div class="toggle-knob w-6 h-6 bg-white rounded-full shadow-md"></div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <span class="text-lg font-medium text-gray-700 w-20 text-right">Cheap</span>
+                <div id="cheap-toggle" class="toggle-switch w-12 h-6 flex items-center rounded-full cursor-pointer toggle-off">
+                    <div class="toggle-knob w-6 h-6 bg-white rounded-full shadow-md"></div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <span class="text-lg font-medium text-gray-700 w-20 text-right">Good</span>
+                <div id="good-toggle" class="toggle-switch w-12 h-6 flex items-center rounded-full cursor-pointer toggle-off">
+                    <div class="toggle-knob w-6 h-6 bg-white rounded-full shadow-md"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fastToggle = document.getElementById('fast-toggle');
+            const cheapToggle = document.getElementById('cheap-toggle');
+            const goodToggle = document.getElementById('good-toggle');
+
+            const toggles = [fastToggle, cheapToggle, goodToggle];
+
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    toggle.classList.toggle('toggle-on');
+                    toggle.classList.toggle('toggle-off');
+                    checkState();
+                });
+            });
+
+            function checkState() {
+                const fastOn = fastToggle.classList.contains('toggle-on');
+                const cheapOn = cheapToggle.classList.contains('toggle-on');
+                const goodOn = goodToggle.classList.contains('toggle-on');
+
+                // Logica: non tutti e tre possono essere su ON
+                if (fastOn && cheapOn && goodOn) {
+                    // Se tutti e tre sono ON, disattiva uno degli interruttori
+                    // L'interruttore che si disattiva è quello che è stato attivato per ultimo
+                    // In questo caso, per l'utente, disattiviamo il "fast" o "cheap"
+                    // per far capire che la logica è che non possono esserci 3 su ON
+                    if (fastToggle.classList.contains('toggle-on')) {
+                        fastToggle.classList.remove('toggle-on');
+                        fastToggle.classList.add('toggle-off');
+                    } else if (cheapToggle.classList.contains('toggle-on')) {
+                        cheapToggle.classList.remove('toggle-on');
+                        cheapToggle.classList.add('toggle-off');
+                    }
+                     // Se l'utente ha acceso il "good", disattiva "fast"
+                    if (goodOn && fastOn) {
+                        fastToggle.classList.remove('toggle-on');
+                        fastToggle.classList.add('toggle-off');
+                    }
+                    // Se l'utente ha acceso il "good", disattiva "cheap"
+                    if (goodOn && cheapOn) {
+                        cheapToggle.classList.remove('toggle-on');
+                        cheapToggle.classList.add('toggle-off');
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
